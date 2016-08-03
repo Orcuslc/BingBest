@@ -1,10 +1,11 @@
-# /usr/bin/python3
+#!/usr/bin/python3
 
 import requests
 # from datetime import datetime
 import re
 import os 
 import sys
+import subprocess
 # import commands
 
 class Spyder:
@@ -24,19 +25,15 @@ class Spyder:
 			'Connection': 'keep-alive',
 			'Cache-Control': 'max-age=0',
 		}
-		self.save_route = './pics/'
-		self.pic_route = None
-		self.dir = None
+		self.save_route = '/home/chuanlu/Pictures/BingBest_Saved/'
 
 	def get_page(self):
 		try:
 			page = requests.get(url = self.url, headers = self.headers)
 		finally:
-			# print(page.text)
-			pic = re.findall(r'url\(http.*\.jpg\)', page.text)
-			print(pic)
-			pic_url = pic[0][4:-1]
-			# print(pic_url)
+			#print(page.text)
+			pic = re.findall(r'url: "http.*1920x1080\.jpg"', page.text)
+			pic_url = pic[0][6:-1]
 			pic = requests.get(url = pic_url, headers = self.headers)
 			pic_name = re.findall(r'/.*?\.jpg', pic_url)[0]
 			pic_name = pic_name.split('/')[-1]
@@ -52,15 +49,15 @@ class Spyder:
 
 	def set_background(self):
 		self.get_dir()
-		command = 'gsettings set org.gnome.desktop.background picture-uri' \
-			+ ' file://' + self.dir + '/' + self.pic_route[2:]
-		print(command)
-		a = os.popen(command).read()
-		print(a)
+		print(self.pic_route)
+		command = 'gconftool-2 --set --type string /desktop/gnome/background/picture_filename ' + "'"\
+				+ self.pic_route + "'"
+		a = subprocess.Popen(command, shell=True)
+		a.wait()
+		#print(a)
 
 	def get_dir(self):
 		self.dir = sys.path[0]
-		print(self.dir)
 
 	def run(self):
 		self.get_page()
