@@ -58,7 +58,10 @@ class spider:
 			return "Not Done"
 		with open(self._temp) as f:
 			pic = os.getcwd() + os.path.sep + self._path + f.readline()[:-1]
-		win32gui.SystemParametersInfo(win32con.SPI_SETDESKWALLPAPER, pic, 1+2)
+		if os.name == 'nt':
+			win32gui.SystemParametersInfo(win32con.SPI_SETDESKWALLPAPER, pic, 1+2)
+		elif os.name == 'posix': # Only support gnome-based desktop here.
+			os.system('gsettings set org.gnome.desktop.background picture-uri {pic}'.format(pic = pic))
 
 if __name__ == '__main__':
 	S = spider()
