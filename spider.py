@@ -3,7 +3,7 @@ import os, sys, io
 import json
 from screeninfo import get_monitors
 import simplejson
-import win32gui
+import win32gui, win32con, win32api
 
 # pip install --trusted-host pypi.python.org ***
 
@@ -16,7 +16,7 @@ def get_screen_resolution():
 	return monitor.width, monitor.height
 
 class spider:
-	def __init__(self, path = './'):
+	def __init__(self, *, path = 'pic', log = 'log.txt', temp = 'temp'):
 		self.bing = 'http://cn.bing.com'
 		self.url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1' # The Bing Wallpaper API
 		self._headers = {
@@ -28,26 +28,39 @@ class spider:
 			'Connection': 'Keep-Alive'
 		}
 		self._got_pic = False
+		self._path = path + os.path.sep
+		self._log = log
+		self._temp = temp
 
 	def get(self):
 		try:
 			resp = requests.get(self.url, headers = self._headers).json() # Json format of response
+		except simplejson.scanner.JSONDecodeError:
+			raise ConnectionError('Network Connection Failed!')
+		finally:
 			urlbase = resp['images'][0]['urlbase']
 			width, height = get_screen_resolution()
 			url = '{url}_{width}x{height}.jpg'.format(url = self.bing+urlbase, width = str(width), height = str(height))
 			name = url.split('/')[-1]
 			pic = requests.get(url, headers = self._headers).content
-			with open(path+name, 'wb') as f:
+			if not os.path.isdir(self._path):
+				os.makedirs(self._path)
+			with open(self._path+name, 'wb') as f:
 				f.write(pic)
-		except simplejson.scanner.JSONDecodeError:
-			raise ConnectionError('Network Connection Failed!')
-		finally:
+			with open(self._log, 'a') as f:
+				f.write(name+'\n')
+			with open(self._temp, 'w') as f:
+				f.write(name+'\n')
 			self._got_pic = True
 
 	def set(self):
-		pic = 
-
+		if not self._got_pic:
+			return "Not Done"
+		with open(self._temp) as f:
+			pic = os.getcwd() + os.path.sep + self._path + f.readline()[:-1]
+		win32gui.SystemParametersInfo(win32con.SPI_SETDESKWALLPAPER, pic, 1+2)
 
 if __name__ == '__main__':
 	S = spider()
 	S.get()
+	S.set()
