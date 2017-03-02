@@ -4,7 +4,6 @@ import json
 from screeninfo import get_monitors
 import simplejson
 import win32gui, win32con, win32api
-
 # pip install --trusted-host pypi.python.org ***
 
 if os.name == 'nt':	# Windows
@@ -16,7 +15,7 @@ def get_screen_resolution():
 	return monitor.width, monitor.height
 
 class spider:
-	def __init__(self, *, path = 'pic', log = 'log.txt', temp = 'temp'):
+	def __init__(self, *, path = 'pic', log = 'log', temp = 'temp'):
 		self.bing = 'http://cn.bing.com'
 		self.url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1' # The Bing Wallpaper API
 		self._headers = {

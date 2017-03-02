@@ -1,2 +1,2 @@
 # BingBest
-A Bing wallpaper fetcher for Linux.
+A Bing wallpaper fetcher for Windows and Linux.
