@@ -14,10 +14,18 @@ def get_screen_resolution():
 	monitor = get_monitors()[0]
 	return monitor.width, monitor.height
 
+date = 0
+
 class spider:
-	def __init__(self, *, path = 'pic', log = 'log', temp = 'temp'):
+	'''
+	date:
+		0: today
+		-1: tomorrow
+		i>0: i days before today
+	'''
+	def __init__(self, *, date = date, path = 'pic', log = 'log', temp = 'temp'):
 		self.bing = 'http://cn.bing.com'
-		self.url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1' # The Bing Wallpaper API
+		self.url = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx='+str(date)+'&n=1' # The Bing Wallpaper API
 		self._headers = {
 			'Accept': 'text/html, application/xhtml+xml, image/jxr, */*',
 			'Accept-Language': 'zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3',
