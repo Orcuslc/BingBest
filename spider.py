@@ -1,7 +1,7 @@
 import requests
 import os, sys, io
 import json
-from screeninfo import get_monitors
+# from screeninfo import get_monitors
 import simplejson
 import win32gui, win32con, win32api
 # pip install --trusted-host pypi.python.org ***
@@ -11,8 +11,9 @@ if os.name == 'nt':	# Windows
 	sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding = 'utf-8')
 
 def get_screen_resolution():
-	monitor = get_monitors()[0]
-	return monitor.width, monitor.height
+	# monitor = get_monitors()[0]
+	# return monitor.width, monitor.height
+	return win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
 
 date = 0
 
