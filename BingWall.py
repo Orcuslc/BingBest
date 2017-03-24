@@ -3,17 +3,28 @@ import os, sys, io
 import json
 # from screeninfo import get_monitors
 import simplejson
-import win32gui, win32con, win32api
+import win32gui, win32api, win32con, ctypes
 # pip install --trusted-host pypi.python.org ***
 
 if os.name == 'nt':	# Windows
 	# Change system standard output codec to 'UTF-8'
 	sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding = 'utf-8')
 
+# Get System DPI
+# def get_system_dpi():
+# 	hdc = win32gui.GetDC(0)
+# 	para_x = 88
+# 	para_y = 90
+# 	x_dpi = win32print.GetDeviceCaps(hdc, para_x)
+# 	y_dpi = win32print.GetDeviceCaps(hdc, para_y)
+# 	return x_dpi, y_dpi
+
+# print(get_system_dpi())
+
 def get_screen_resolution():
-	# monitor = get_monitors()[0]
-	# return monitor.width, monitor.height
-	return win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
+	user32 = ctypes.windll.user32
+	user32.SetProcessDPIAware()
+	return user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 
 date = 0
 
