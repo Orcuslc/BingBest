@@ -2,7 +2,7 @@ import requests
 
 class Downloader:
 
-	def __init__(self, *, date = date, country = 'cn', path = 'pic', log = 'log', temp = 'temp'):
+	def __init__(self, date = 0, country = 'cn', path = 'pic', log = 'log', temp = 'temp'):
 		'''
 		date:
 			0: today
