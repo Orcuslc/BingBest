@@ -3,28 +3,7 @@ import os, sys, io
 import json
 # from screeninfo import get_monitors
 import simplejson
-import win32gui, win32api, win32con, ctypes
-# pip install --trusted-host pypi.python.org ***
-
-if os.name == 'nt':	# Windows
-	# Change system standard output codec to 'UTF-8'
-	sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding = 'utf-8')
-
-# Get System DPI
-# def get_system_dpi():
-# 	hdc = win32gui.GetDC(0)
-# 	para_x = 88
-# 	para_y = 90
-# 	x_dpi = win32print.GetDeviceCaps(hdc, para_x)
-# 	y_dpi = win32print.GetDeviceCaps(hdc, para_y)
-# 	return x_dpi, y_dpi
-
-# print(get_system_dpi())
-
-def get_screen_resolution():
-	user32 = ctypes.windll.user32
-	user32.SetProcessDPIAware()
-	return user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+from utils import *
 
 date = 0
 
@@ -61,6 +40,7 @@ class spider:
 			width, height = get_screen_resolution()
 			url = '{url}_{width}x{height}.jpg'.format(url = self.bing+urlbase, width = str(width), height = str(height))
 			name = url.split('/')[-1]
+			print(url)
 			pic = requests.get(url, headers = self._headers).content
 			if not os.path.isdir(self._path):
 				os.makedirs(self._path)
@@ -85,4 +65,4 @@ class spider:
 if __name__ == '__main__':
 	S = spider()
 	S.get()
-	S.set()
+	# S.set()

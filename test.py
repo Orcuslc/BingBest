@@ -1,16 +1,21 @@
 from unittest.mock import patch
 import unittest
-import spider
+import download
+import utils
 
-sample_screen_resolution = (3840, 2160)
+sample_screen_resolution = ['1920', '1080']
 
 class Test(unittest.TestCase):
-	@patch('spider.get_screen_resolution', return_value = sample_screen_resolution)
-	def test_set(self, mock_get):
-		S = spider.spider()
+	@patch('utils.get_screen_resolution', return_value = sample_screen_resolution)
+	def test_get(self, mock_get):
+		S = download.Downloader()
 		S.get()
-		S.set()
 
-if __name__ == '__main__':
-	T = Test()
-	T.test_set()
+	def test_resolution(self):
+		got = utils.get_screen_resolution()
+		true = sample_screen_resolution
+		self.assertEqual(got, true)
+
+T = Test()
+T.test_get()
+T.test_resolution()
