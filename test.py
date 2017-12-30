@@ -1,16 +1,16 @@
 from unittest.mock import patch
 import unittest
-import spider
+import BingWall
+import utils
 
-sample_screen_resolution = (3840, 2160)
+sample_screen_resolution = (1920, 1080)
 
 class Test(unittest.TestCase):
-	@patch('spider.get_screen_resolution', return_value = sample_screen_resolution)
-	def test_set(self, mock_get):
-		S = spider.spider()
+	@patch('BingWall.get_screen_resolution', return_value = sample_screen_resolution)
+	def test_get(self, mock_get):
+		S = BingWall.spider()
 		S.get()
-		S.set()
 
 if __name__ == '__main__':
 	T = Test()
-	T.test_set()
+	T.test_get()
