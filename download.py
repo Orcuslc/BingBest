@@ -6,7 +6,7 @@ from utils import *
 
 class Downloader:
 
-	def __init__(self, date = 0, *, country = 'cn', save_path = 'pic', log_path = 'BingWall.log'):
+	def __init__(self, date = 0, country = 'cn', save_path = 'pic', log_path = 'BingWall.log'):
 		'''
 		date:
 			0: today
@@ -27,21 +27,30 @@ class Downloader:
 		if not os.path.isdir(self._save_path):
 			os.makedirs(self._save_path)
 		logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %H:%M:%S', level = logging.INFO, filename=log_path)
+		self._got_pic = False
 		
 
 	def get(self):
 		try:
 			resp = requests.get(self.url, headers = self._headers).json()
 		except requests.exceptions.ConnectionError:
-			logging.critical("Network connection failed")	
-			return False
+			logging.critical("Network connection failed")
+			return
 		urlbase = resp['images'][0]['urlbase']
 		width, height = get_screen_resolution()
 		url = '{}_{}x{}.jpg'.format(self.bing+urlbase, width, height)
 		name = url.split('/')[-1]
-		print(url)
 		pic = requests.get(url, headers = self._headers).content
 		with open(self._save_path+name, 'wb') as f:
 			f.write(pic)
 		logging.info("Get image {}".format(name))
-		return True
+		self._got_pic = True
+		self._image = self._save_path + name
+
+	def set(self):
+		if not self._got_pic:
+			print("Failed to get picture, please check network connection.")
+			return
+		pic = os.getcwd() + os.path.sep + self._image
+		if os.name == 'nt':
+			win32gui.SystemParametersInfo(win32con.SPI_SETDESKWALLPAPER, pic, 1+2)
