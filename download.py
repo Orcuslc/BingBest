@@ -6,7 +6,7 @@ from utils import *
 
 class Downloader:
 
-	def __init__(self, date = 0, country = 'cn', save_path = 'pic', log_path = 'BingWall.log'):
+	def __init__(self, date = 0, country = 'cn', save_path = 'pic', log_path = 'bingbest.log'):
 		'''
 		date:
 			0: today
