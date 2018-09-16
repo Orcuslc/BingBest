@@ -1,0 +1,8 @@
+pic/
+__pycache__/
+bingbest.log
+test/
+dist/
+build/
+*.spec
+config.json
