@@ -22,6 +22,7 @@ default_country = config["country"]
 save_path = config["save_path"]
 log_path = config["log_path"]
 
+
 if is_CLI:
 	while 1:
 		date = input("Enter date: -1, 0, 1, 2, 3, 4, 5, 6. \n i means i days before today. \n Default: {date}\n".format(date = default_date)) or default_date

@@ -13,16 +13,9 @@ class Downloader:
 			-1: tomorrow
 			i>0: i days before today
 		'''
-		self.bing = 'http://{}.bing.com'.format(country)
-		self.url = '{}/HPImageArchive.aspx?format=js&idx={}&n=1'.format(self.bing, date) # The Bing Wallpaper API
-		self._headers = {
-			'Accept': 'text/html, application/xhtml+xml, image/jxr, */*',
-			'Accept-Language': 'zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3',
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15031',
-			'Accept-Encoding': 'gzip, deflate, br',
-			'Host': 'www.bing.com',
-			'Connection': 'Keep-Alive'
-		}
+		self.bing = 'https://www.bing.com'
+		self.url = '{}/HPImageArchive.aspx?format=js&idx={}&n=1&cc={}'.format(self.bing, date, country) # The Bing Wallpaper API
+		# print(self.url)
 		self._save_path = save_path + os.path.sep
 		if not os.path.isdir(self._save_path):
 			os.makedirs(self._save_path)
@@ -31,8 +24,9 @@ class Downloader:
 		
 
 	def get(self):
+		# print(requests.get(self.url).text)
 		try:
-			resp = requests.get(self.url, headers = self._headers).json()
+			resp = requests.get(self.url).json()
 		except requests.exceptions.ConnectionError:
 			logging.critical("Network connection failed")
 			return
@@ -40,7 +34,7 @@ class Downloader:
 		width, height = get_screen_resolution()
 		url = '{}_{}x{}.jpg'.format(self.bing+urlbase, width, height)
 		name = url.split('/')[-1]
-		pic = requests.get(url, headers = self._headers).content
+		pic = requests.get(url).content
 		with open(self._save_path+name, 'wb') as f:
 			f.write(pic)
 		logging.info("Get image {}".format(name))

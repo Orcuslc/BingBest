@@ -10,8 +10,8 @@ def get_screen_resolution():
 		user32.SetProcessDPIAware()
 		return user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 	else:
-		p = subprocess.Popen('xrandr', stdout = subprocess.PIPE)
-		p2 = subprocess.Popen(['grep', '*'], stdin = p.stdout, stdout = subprocess.PIPE)
+		p = subprocess.Popen('xdpyinfo', stdout = subprocess.PIPE)
+		p2 = subprocess.Popen(['awk', '/dimensions/{print $2}'], stdin = p.stdout, stdout = subprocess.PIPE)
 		p.stdout.close()
 		r, _ = p2.communicate()
 		resolution = str(r.split()[0], encoding = 'utf-8')
